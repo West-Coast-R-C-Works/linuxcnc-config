@@ -1,0 +1,7 @@
+net spindle-at-speed => gmoccapy.spindle_at_speed_led
+net spindle-vel-cmd-rpm => gmoccapy.spindle_feedback_bar
+
+# unlinkp iocontrol.0.tool-change
+# unlinkp iocontrol.0.tool-changed
+
+# net tool-prep-loop         iocontrol.0.tool-prepare      <=   iocontrol.0.tool-prepared

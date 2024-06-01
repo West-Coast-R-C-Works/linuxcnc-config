@@ -1,0 +1,8 @@
+o<on_abort> sub
+
+(print, on_abort executing)
+
+o<reset_state> call
+
+o<on_abort> endsub
+m2

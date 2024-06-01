@@ -1,0 +1,27 @@
+T1   P1   D+6.350000 Z-220.137000 ;1/4" - flat (1/4 1 flute aluminium) 
+T2   P2   D+6.350000 Z-135.805500 ;1/4 inch 2 flute wood 
+T3   P3   D+6.350000 ;1/4 inch 2 flute plastic amana 
+T4   P4   D+2.700000 Z-172.854300 ;2.7 mm drill metal 
+T5   P5   D+3.175000 Z-161.345500 ;1/8 carbon flat head amana 
+T6   P6   D+2.400000 ;2.4 mm carbonfiber flat head 
+T8   P8   D+3.000000 ;3mm foam cutter 75mm long 
+T9   P9   D+3.000000 Z-160.819500 ;3mm carbon datron 
+T10  P10  D+6.350000 Z-117.368000 ;90 degree chamfer mill 
+T11  P11  D+3.000000 ;single flute aluminium amana 
+T12  P12  D+3.000000 Z-168.021500 ;single flute aluminium datron 
+T13  P13  D+3.000000 Z-182.005900 ;m3 widia roll 
+T14  P14  D+3.000000 ; 
+T15  P15  D+12.700000 Z-178.452000 ;1/2 inch 2 flute wood 
+T16  P16  D+3.000000 Z-189.794000 ;3mm carbon drill datron 
+T17  P17  D+3.000000 Z-175.025000 ;3mm carbite drill 
+T18  P18  D+3.175000 ;1/8" drill 
+T19  P19  D+3.125000 ;1/8 drill 
+T20  P20  D+4.200000 ;4.2 mm drill 
+T21  P21  D+6.350000 Z-189.101500 ;1/4 3 flute long aluminium 
+T99  P99  D+5.090000 Z+0.002500 ;edge finder 
+T100 P100 Z-194.118000 ;Spindle Nose 
+T22  P22  D+10.000000 Z-163.546000 ;10mm face mill datron 
+T23  P23  D+2.400000 Z-190.159500 ;2. 4mm single flut Datron 
+T24  P24  D+2.000000 Z-168.130000 ;2mm Carbon datron 
+T25  P25  D+6.000000 Z-155.496000 ;90 degree champfer Datron 
+T28  P28  D+6.000000 Z-149.530000 ;Datron 6mm 4in1 single flute 68806E 

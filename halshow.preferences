@@ -1,0 +1,52 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 1310x754+162+171
+placeFrames 0.3938953488372093
+set ::ratio 0.3938953488372093
+set ::old_w_leftf 160
+set ::watchlist {
+    pin+halui.axis.selected
+    pin+halui.axis.x.select
+    pin+jog-incr-select.out-s
+    pin+jog-incr-select.out-f
+    pin+halui.axis.x.increment-plus
+    pin+halui.axis.x.is-selected
+    sig+y-servo-alarm-out
+    pin+hm2_7i92.0.7i77.0.0.output-10
+    pin+lcec.0.VALVE_OUT.dout-0
+    pin+lcec.0.VALVE_OUT.slave-state-op
+    pin+lcec.0.VALVE_OUT.slave-state-init
+    pin+lcec.0.VALVE_OUT.slave-state-preop
+    pin+lcec.0.VALVE_OUT.slave-state-safeop
+    pin+lcec.0.VALVE_OUT.slave-oper
+    pin+lcec.0.VALVE_OUT.slave-online
+    pin+lcec.read-all.time
+    pin+servo-thread.time
+    pin+hm2_7i92.0.write.time
+    pin+hm2_7i92.0.read.time
+    pin+hm2_7i92.0.read-request.time
+    param+hm2_7i92.0.read.tmax
+    param+lcec.write-all.tmax
+    param+lcec.read-all.tmax
+    sig+user-spindle-open
+    sig+spindle-zero-speed
+    sig+spindle-vel-cmd-rpm
+    pin+lcec.0.DRV.error-code
+    pin+lcec.0.slaves-responding
+    pin+lcec.0.DRV.slave-state-op
+    pin+lcec.0.DRV.slave-state-init
+    pin+lcec.0.DRV.slave-state-preop
+    pin+lcec.0.FIELD_INPUT.slave-state-preop
+    pin+lcec.0.FIELD_INPUT.slave-state-op
+    pin+lcec.0.DRV.fault-reset
+    pin+lcec.0.DRV.slave-online
+    pin+lcec.0.DRV.slave-oper
+    pin+lcec.0.DRV.stat-op-enabled
+}
+set ::workmode watchhal
+set ::watchInterval 100
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1

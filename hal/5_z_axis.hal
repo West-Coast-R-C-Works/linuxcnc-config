@@ -1,0 +1,83 @@
+setp   pid.z.Pgain     [JOINT_2]P
+setp   pid.z.Igain     [JOINT_2]I
+setp   pid.z.Dgain     [JOINT_2]D
+setp   pid.z.bias      [JOINT_2]BIAS
+setp   pid.z.FF0       [JOINT_2]FF0
+setp   pid.z.FF1       [JOINT_2]FF1
+setp   pid.z.FF2       [JOINT_2]FF2
+setp   pid.z.FF3       [JOINT_2]FF3
+setp   pid.z.deadband  [JOINT_2]DEADBAND
+setp   pid.z.maxoutput [JOINT_2]MAX_OUTPUT
+setp   pid.z.error-previous-target true
+
+net z-index-enable  <=> pid.z.index-enable
+net z-enable        =>  pid.z.enable
+net z-output        <=  pid.z.output
+net z-pos-cmd       =>  pid.z.command
+net z-motor-pos-fb  =>  pid.z.feedback
+net z-motor-vel-fb        =>  pid.z.feedback-deriv
+
+# Step Gen signals/setup
+
+setp   [HMOT](CARD0).stepgen.02.dirsetup        [JOINT_2]DIRSETUP
+setp   [HMOT](CARD0).stepgen.02.dirhold         [JOINT_2]DIRHOLD
+setp   [HMOT](CARD0).stepgen.02.steplen         [JOINT_2]STEPLEN
+setp   [HMOT](CARD0).stepgen.02.stepspace       [JOINT_2]STEPSPACE
+setp   [HMOT](CARD0).stepgen.02.position-scale  [JOINT_2]STEP_SCALE
+setp   [HMOT](CARD0).stepgen.02.step_type        0
+setp   [HMOT](CARD0).stepgen.02.control-type     1
+setp   [HMOT](CARD0).stepgen.02.maxaccel         [JOINT_2]STEPGEN_MAXACCEL
+setp   [HMOT](CARD0).stepgen.02.maxvel           [JOINT_2]STEPGEN_MAXVEL
+
+# ---closedloop stepper signals---
+
+net z-pos-cmd    <= joint.2.motor-pos-cmd
+net z-output     <= [HMOT](CARD0).stepgen.02.velocity-cmd
+net z-enable     <= joint.2.amp-enable-out => [HMOT](CARD0).stepgen.02.enable
+
+# ---Encoder Feedback signals/setup---
+
+# Linear Scale Setup
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).counter-mode 0
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).filter 1
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).index-invert 0
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).index-mask 0
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).index-mask-invert 0
+# setp    [FIELD_INPUT](Z_LINEAR_ENCODER).scale  [JOINT_2]ENCODER_SCALE
+
+# Motor Encoder Setup
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).counter-mode 0
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).filter 1
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).index-invert 1
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).index-mask 0
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).index-mask-invert 0
+setp    [FIELD_INPUT](Z_MOTOR_ENCODER).scale  [JOINT_2]MOTOR_ENCODER_SCALE
+
+# Linear Scale Signals
+#net z-pos-fb               <=  [FIELD_INPUT](Z_LINEAR_ENCODER).position
+#net z-pos-fb               => joint.2.motor-pos-fb
+#net z-vel-fb               <=  [FIELD_INPUT](Z_LINEAR_ENCODER).velocity
+#net z-index-enable    joint.2.index-enable  <=>  [FIELD_INPUT](Z_LINEAR_ENCODER).index-enable
+#net z-pos-rawcounts        <=  [FIELD_INPUT](Z_LINEAR_ENCODER).rawcounts
+
+# Motor Encoder Signals
+net z-motor-pos-fb               <=  [FIELD_INPUT](Z_MOTOR_ENCODER).position => joint.2.motor-pos-fb
+net z-motor-vel-fb               <=  [FIELD_INPUT](Z_MOTOR_ENCODER).velocity
+net z-motor-index-enable         joint.2.index-enable  <=>  [FIELD_INPUT](Z_MOTOR_ENCODER).index-enable
+net z-motor-pos-rawcounts        <=  [FIELD_INPUT](Z_MOTOR_ENCODER).rawcounts  
+
+# ---setup home / limit switch signals---
+
+net home-z <= [FIELD_INPUT](HOME_Z)-not => joint.2.home-sw-in
+setp joint.2.neg-lim-sw-in 0
+setp joint.2.pos-lim-sw-in 0
+
+## Alarm
+net z-servo-alarm-input <= [FIELD_INPUT](DYN_4_Z_ALARM)-not => z-servo-alarm.in0
+net enable-del => z-servo-alarm.in1
+net z-servo-alarm-out joint.2.amp-fault-in <= z-servo-alarm.out
+
+## Brake
+net enable-del => z-brake.in0
+net z-enable   => z-brake.in1
+net z-brake    <= z-brake.out => [FIELD_OUTPUT](Z_BRAKE)

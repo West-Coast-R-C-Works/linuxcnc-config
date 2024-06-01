@@ -1,0 +1,28 @@
+7i77 outputs
+0	mist
+1	air blanket
+2	cone unlock
+3	cone lock
+4	n/c
+5	n/c
+6	n/c
+7	vacuum cleaner
+8	vacuum pump
+9	reset x
+10	reset y
+11	reset z
+12	brake z
+
+7i77 inputs
+0	estop-ok
+1	home x
+2	home y
+3	home z
+4	probe in
+5	probe error
+6	estop in
+7	n/c
+8	DYN-4 alarm x
+9	DYN-4 alarm y
+10	DYN-4 alarm z
+11	tool probe

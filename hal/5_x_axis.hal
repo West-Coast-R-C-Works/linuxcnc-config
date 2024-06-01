@@ -1,0 +1,79 @@
+setp   pid.x.Pgain     [JOINT_0]P
+setp   pid.x.Igain     [JOINT_0]I
+setp   pid.x.Dgain     [JOINT_0]D
+setp   pid.x.bias      [JOINT_0]BIAS
+setp   pid.x.FF0       [JOINT_0]FF0
+setp   pid.x.FF1       [JOINT_0]FF1
+setp   pid.x.FF2       [JOINT_0]FF2
+setp   pid.x.FF3       [JOINT_0]FF3
+setp   pid.x.deadband  [JOINT_0]DEADBAND
+setp   pid.x.maxoutput [JOINT_0]MAX_OUTPUT
+setp   pid.x.error-previous-target true
+
+net x-index-enable  <=> pid.x.index-enable
+net x-enable        =>  pid.x.enable
+net x-output        <=  pid.x.output
+net x-pos-cmd       =>  pid.x.command
+net x-pos-fb        =>  pid.x.feedback
+net x-vel-fb        =>  pid.x.feedback-deriv
+
+# Step Gen signals/setup
+
+setp   [HMOT](CARD0).stepgen.00.dirsetup        [JOINT_0]DIRSETUP
+setp   [HMOT](CARD0).stepgen.00.dirhold         [JOINT_0]DIRHOLD
+setp   [HMOT](CARD0).stepgen.00.steplen         [JOINT_0]STEPLEN
+setp   [HMOT](CARD0).stepgen.00.stepspace       [JOINT_0]STEPSPACE
+setp   [HMOT](CARD0).stepgen.00.position-scale  [JOINT_0]STEP_SCALE
+setp   [HMOT](CARD0).stepgen.00.step_type        0
+setp   [HMOT](CARD0).stepgen.00.control-type     1
+setp   [HMOT](CARD0).stepgen.00.maxaccel         [JOINT_0]STEPGEN_MAXACCEL
+setp   [HMOT](CARD0).stepgen.00.maxvel           [JOINT_0]STEPGEN_MAXVEL
+
+# ---closedloop stepper signals---
+
+net x-pos-cmd    <= joint.0.motor-pos-cmd
+net x-output     => [HMOT](CARD0).stepgen.00.velocity-cmd
+net x-enable     <= joint.0.amp-enable-out => [HMOT](CARD0).stepgen.00.enable
+  
+
+# ---Encoder Feedback signals/setup---
+
+# Linear Scale Setup
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).counter-mode 0
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).filter 1
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).index-invert 0
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).index-mask 0
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).index-mask-invert 0
+setp    [FIELD_INPUT](X_LINEAR_ENCODER).scale  [JOINT_0]ENCODER_SCALE
+
+# Motor Encoder Setup
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).counter-mode 0
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).filter 1
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).index-invert 1
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).index-mask 0
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).index-mask-invert 0
+# setp    [FIELD_INPUT](X_MOTOR_ENCODER).scale  [JOINT_0]MOTOR_ENCODER_SCALE
+
+# Linear Scale Signals
+net x-pos-fb               <=  [FIELD_INPUT](X_LINEAR_ENCODER).position
+net x-pos-fb                => joint.0.motor-pos-fb
+net x-vel-fb               <=  [FIELD_INPUT](X_LINEAR_ENCODER).velocity
+net x-index-enable    joint.0.index-enable  <=>  [FIELD_INPUT](X_LINEAR_ENCODER).index-enable
+net x-pos-rawcounts        <=  [FIELD_INPUT](X_LINEAR_ENCODER).rawcounts
+
+# Motor Encoder Signals
+# net x-motor-pos-fb               <=  [FIELD_INPUT](X_MOTOR_ENCODER).position
+# net x-motor-vel-fb               <=  [FIELD_INPUT](X_MOTOR_ENCODER).velocity
+# net x-motor-index-enable         <=  [FIELD_INPUT](X_MOTOR_ENCODER).index-enable
+# net x-motor-pos-rawcounts        <=  [FIELD_INPUT](X_MOTOR_ENCODER).rawcounts
+
+# ---setup home / limit switch signals---
+
+net home-x <= [FIELD_INPUT](HOME_X)-not => joint.0.home-sw-in
+setp joint.0.neg-lim-sw-in 0
+setp joint.0.pos-lim-sw-in 0
+
+## Alarm Signals
+net x-servo-alarm-input <= [FIELD_INPUT](DYN_4_X_ALARM)-not => x-servo-alarm.in0
+net enable-del => x-servo-alarm.in1
+net x-servo-alarm-out joint.0.amp-fault-in <= x-servo-alarm.out

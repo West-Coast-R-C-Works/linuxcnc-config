@@ -1,0 +1,86 @@
+; manual toolchange with automatic tool length probe 
+
+o<manual_change> sub
+
+(we change feed, metric/in and potentially G90)
+(so record current modal state)
+(M73 is not useful here because it reverts G43 on return too)
+#<metric> = #<_metric>
+#<absolute> = #<_absolute>
+#<feed> = #<_feed>
+
+;otherwise after the M6 this information is gone!
+#<tool> = #<_selected_tool>
+#<pocket> = #<_selected_pocket>
+
+G21 (TLO and toolchange position is in mm as per ini)
+G90 (absolute)
+
+
+; move to toolchange position: z, then xy
+g53 g0 Z0
+g53 g0 X #<_ini[change_position]x> Y #<_ini[change_position]y>
+g53 g0 Z #<_ini[change_position]z>
+
+; cancel tool offset
+G49
+
+
+M6; Actual Tool Change
+O100 if [#<tool> EQ 0]   ; an unload.
+	O<restore> call [#<metric>] [#<absolute>] [#<feed>]
+O100    return [1] ; indicate success
+O100 endif
+; tool changed - move to toolensor
+g53 g0 Z0
+g53 g0 X #<_ini[toolsensor]x> Y #<_ini[toolsensor]y>
+g53 g0 Z #<_ini[toolsensor]z>
+
+F #<_ini[toolsensor]probefeed_search>
+G91 (relative mode)
+#5063=0
+G38.2 Z #<_ini[toolsensor]maxprobe>
+; #1000 = #5063
+
+; Backoff measurement
+O200 if[EXISTS[#<_ini[toolsensor]backoff>] AND EXISTS[#<_ini[toolsensor]backoff> EQ 1]
+	F #<_ini[toolsensor]probefeed>
+	G38.5 Z.1
+O200 endif
+
+; we must execute this only in the milltask interpreter
+; or preview will break, so test for '#<_task>' which is 1 for 
+; the milltask interpreter and 0 in the UI's
+
+O300 if [[#<_task> GT 0] and [#5070 EQ 0]]
+	O<restore> call [#<metric>] [#<absolute>] [#<feed>]
+O300    return [-2] ; indicate probe contact failure to epilog
+O300 endif
+
+
+#<touch_result> = #5063
+(print,new length is #5063)
+
+O400 if[#<tool> EQ 99]
+	#<_toolprobe_reference_height> = #<touch_result>
+	(print, new reference is #_toolprobe_reference_height)
+O400 elseif [EXISTS[#<_toolprobe_reference_height>]]
+	G10 L1 P#<tool> Z[#<touch_result> - #<_toolprobe_reference_height> + #<_ini[toolsensor]reference_tool_height>]
+O400 else
+		(MSG, "Reference the toolprobe first using t99 m6")
+O400	return [-3]
+O400 endif
+G43
+
+G90 (absolute)
+
+
+; move back to toolchange position: z, then xy
+g53 g0 Z0
+
+; restore g20/21, g90/g91, feed
+O<restore> call [#<metric>] [#<absolute>] [#<feed>]
+
+; succeed by returning a positive value
+o<manual_change> endsub [1]
+m2

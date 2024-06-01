@@ -1,0 +1,231 @@
+# Button Box Inputs
+
+setp debounce.0.delay 4
+setp opt-pause-ed.in-edge FALSE
+
+
+#  ---HALUI signals---
+
+net axis-select-x         halui.axis.x.select
+net jog-x-pos             halui.axis.x.plus
+net jog-x-neg             halui.axis.x.minus
+net jog-x-analog          halui.axis.x.analog
+net x-is-homed            halui.joint.0.is-homed
+net axis-select-y         halui.axis.y.select
+net jog-y-pos             halui.axis.y.plus
+net jog-y-neg             halui.axis.y.minus
+net jog-y-analog          halui.axis.y.analog
+net y-is-homed            halui.joint.1.is-homed
+net axis-select-z         halui.axis.z.select
+net jog-z-pos             halui.axis.z.plus
+net jog-z-neg             halui.axis.z.minus
+net jog-z-analog          halui.axis.z.analog
+net z-is-homed            halui.joint.2.is-homed
+net jog-selected-pos      halui.axis.selected.plus
+net jog-selected-neg      halui.axis.selected.minus
+net spindle-manual-cw     halui.spindle.0.forward
+net spindle-manual-ccw    halui.spindle.0.reverse
+net spindle-manual-stop   halui.spindle.0.stop
+net machine-is-on         halui.machine.is-on
+net jog-speed             halui.axis.jog-speed
+net MDI-mode              halui.mode.is-mdi
+
+# ---Homeing Status---
+net x-is-homed           => homed-1.in0
+net y-is-homed           => homed-1.in1
+net x-y-homed            <= homed-1.out
+net x-y-homed            => homed-2.in0
+net z-is-homed           => homed-2.in1
+net all-homed            <= homed-2.out
+
+# ---feed override signals to mesa encoder - mpg---
+
+setp halui.feed-override.direct-value false
+setp halui.feed-override.scale .01
+setp halui.feed-override.count-enable true
+setp [USER_INPUT](LEFT_ENCODER).scale -1
+net feed-override-pos <= [USER_INPUT](LEFT_ENCODER).position => feed-override-pos-conv.in
+net feed-override-count <= feed-override-pos-conv.out => halui.feed-override.counts
+
+
+# ---spidle override signals to mesa encoder - mpg---
+
+setp halui.spindle.0.override.direct-value false
+setp halui.spindle.0.override.scale .01
+setp halui.spindle.0.override.count-enable true
+setp [USER_INPUT](RIGHT_ENCODER).scale -1
+net spindle-override-pos <= [USER_INPUT](RIGHT_ENCODER).position => spindle-override-pos-conv.in
+net spindle-override-count <= spindle-override-pos-conv.out => halui.spindle.0.override.counts
+# net spindle-override-count <= [USER_INPUT](RIGHT_ENCODER).position => halui.spindle.0.override.counts
+
+
+#  ---digital in signals---
+net red-button-in <= [USER_INPUT](RED_BUTTON)-not => debounce.0.0.in
+net cycle-stop-in <= debounce.0.0.out
+
+net green-button-in <= [USER_INPUT](GREEN_BUTTON)-not => debounce.0.1.in
+net cycle-start-in  <= debounce.0.1.out
+
+net yellow-button-in <= [USER_INPUT](YELLOW_BUTTON)-not => debounce.0.2.in
+net cycle-pause-in   <= debounce.0.2.out
+
+net white-button-in           <= [USER_INPUT](WHITE_BUTTON)-not => debounce.0.3.in
+net cycle-opt-pause-debounced <= debounce.0.3.out           => opt-pause-ed.in
+net cycle-opt-pause-in        <= opt-pause-ed.out
+
+net blue-button-in   <= [USER_INPUT](BLUE_BUTTON)-not => debounce.0.4.in
+net enable-debounced <= debounce.0.4.out          => enable-ed.in
+net enable-in        <= enable-ed.out
+
+
+# ---Cycle status---
+
+net cycle-idle           <= halui.program.is-idle
+net cycle-running        <= halui.program.is-running
+net cycle-paused         <= halui.program.is-paused
+net cycle-opt-pause-act  <= halui.program.optional-stop.is-on
+net cycle-opt-pause-act  => not.0.in 
+net cycle-opt-pause-nact <= not.0.out
+
+# ---Enable/Disable Machine---
+
+net machine-is-on        <= halui.machine.is-on
+net machine-is-on        => not.3.in
+net machine-is-off       => not.3.out  => enable.in0
+net enable-in            => enable.in1
+net enable-machine       <= enable.out => enable-act.set
+net machine-is-on        => enable-act.reset
+net enable-trigger       <= enable-act.out => halui.machine.on
+
+net machine-is-on         => disable.in0
+net enable-in             => disable.in1
+net disable-machine       <= disable.out => disable-act.set
+net machine-is-off        => disable-act.reset
+net disable-trigger       <= disable-act.out => halui.machine.off
+
+#  ---Ready for Cycle Start---
+net all-homed            => not.1.in
+net not-homed            <= not.1.out
+
+net all-homed            => ready-start.in0
+net cycle-idle           => ready-start.in1
+net ready-to-start       <= ready-start.out
+
+# Cylce stop - stop program
+net cycle-stop-in        =>  stop.in0
+net cycle-running        =>  stop.in1
+net cycle-stop           <=  stop.out
+net cycle-stop           =>  halui.program.stop
+
+# Cycle start - run program
+
+net cycle-start-in       =>  start.in0
+net ready-to-start       =>  start.in1
+net cycle-start          <=  start.out
+net cycle-start          =>  halui.program.run
+
+
+# M0 - pause program
+
+net cycle-pause-in       =>  pause.in0
+net cycle-running        =>  pause.in1
+net cycle-pause          <=  pause.out
+net cycle-pause          =>  halui.program.pause
+
+# M1 - optional pause program
+
+net cycle-opt-pause-in   =>  opt-pause-on.in0
+net cycle-opt-pause-nact =>  opt-pause-on.in1
+net opt-p-on-s           <=  opt-p-on.set       <=  opt-pause-on.out
+net cycle-opt-pause-act  =>  opt-p-on.reset
+net cycle-opt-pause-on   <=  opt-p-on.out
+net cycle-opt-pause-on   <=  halui.program.optional-stop.on
+
+net cycle-opt-pause-in   =>  opt-pause-off.in0
+net cycle-opt-pause-act  =>  opt-pause-off.in1
+net opt-p-off-s          <=  opt-p-off.set       <=  opt-pause-off.out
+net cycle-opt-pause-nact =>  opt-p-off.reset
+net cycle-opt-pause-off  <=  opt-p-off.out
+net cycle-opt-pause-off  =>  halui.program.optional-stop.off
+
+# ---Cycle resume - run program---
+
+net cycle-start-in       =>  resume.in0
+net cycle-paused         =>  resume.in1
+net cycle-resume         <=  resume.out
+net cycle-resume         =>  halui.program.resume
+
+# ---Home All--
+
+net cycle-start-in       => homeing.in0
+net not-homed            => homeing.in1
+net homeing-start        <= homeing.out          => halui.home-all
+
+net homeing-start        => homing-act.set
+net all-homed            => homing-act.reset
+net homing-active        <= homing-act.out       => not.2.in
+
+net not-homing           <= not.2.out
+
+# --red light--
+
+net cycle-idle           => red.in0
+net not-homing           => red.in1
+net red-button-led-out   <= red.out => [USER_OUTPUT](RED_BUTTON_LED)
+   
+# --green light--
+
+net cycle-running        => green.in0
+net homing-active        => green.in1
+net green-button-led-out <= green.out => [USER_OUTPUT](GREEN_BUTTON_LED)
+
+
+#  ---digital out signals---
+net cycle-paused        => [USER_OUTPUT](YELLOW_BUTTON_LED)
+net cycle-opt-pause-act => [USER_OUTPUT](WHITE_BUTTON_LED)
+net machine-is-enabled  => [USER_OUTPUT](BLUE_BUTTON_LED)
+
+
+# -- Vel Mode--
+
+setp axis.x.jog-vel-mode 0
+setp axis.y.jog-vel-mode 0
+setp axis.z.jog-vel-mode 0
+
+# ---Encoder---
+
+net mpg-count       <= [USER_INPUT](MPG_ENCODER).count
+net mpg-count       => axis.x.jog-counts
+net mpg-count       => axis.y.jog-counts
+net mpg-count       => axis.z.jog-counts
+
+# connect selectable mpg Axis 
+
+net x-axis-select-in <= [USER_INPUT](X_AXIS_SELECT)-not => axis.x.jog-enable
+net y-axis-select-in <= [USER_INPUT](Y_AXIS_SELECT)-not => axis.y.jog-enable
+net z-axis-select-in <= [USER_INPUT](Z_AXIS_SELECT)-not => axis.z.jog-enable
+#net a-axis-select-in <= [USER_INPUT](X_AXIS_SELECT)      => axis.x.jog-enable
+#net b-axis-select-in <= [USER_INPUT](X_AXIS_SELECT)      => axis.x.jog-enable
+
+# connect selectable mpg jog increments 
+
+net step-0-100-in <= [USER_INPUT](STEP_0_100)-not => jog-incr-select.sel0
+net step-0-010-in <= [USER_INPUT](STEP_0_010)-not =>  jog-incr-select.sel1
+net step-0-001-in <= [USER_INPUT](STEP_0_001)-not =>  jog-incr-select.sel2
+setp jog-incr-select.sel3 false
+net selected-jog-incr    <=  jog-incr-select.out-f
+setp jog-incr-select.debounce-time      0.200000
+setp jog-incr-select.use-graycode      False
+setp jog-incr-select.suppress-no-input False
+setp jog-incr-select.in00          0.0000
+setp jog-incr-select.in01          0.1000
+setp jog-incr-select.in02          0.0100
+setp jog-incr-select.in04          0.0010
+
+net selected-jog-incr => axis.x.jog-scale
+net selected-jog-incr => axis.y.jog-scale
+net selected-jog-incr => axis.z.jog-scale
+
+
+
+net user-spindle-open <= [USER_INPUT](SPINDLE_UNLOCK)

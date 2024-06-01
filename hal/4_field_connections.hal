@@ -1,0 +1,16 @@
+## Inputs
+# E-Stop
+net estop-ok-in <= [FIELD_INPUT](ESTOP_OK) => iocontrol.0.emc-enable-in
+
+# Probe
+net tool-probe-in    <= [FIELD_INPUT](TOOL_PROBE)-not => motion.probe-input
+net probe-in    <= [FIELD_INPUT](3D_PROBE)        => motion.digital-in-00
+net probe-error <= [FIELD_INPUT](3D_PROBE_ERROR)  => motion.digital-in-01
+
+## Outputs
+net mist-out           <= iocontrol.0.coolant-mist => [FIELD_OUTPUT](MIST)
+# net vacuum-cleaner-out <= motion.digital-out-00    => [FIELD_OUTPUT](SUCTION_CLEANER)
+# net flood-coolant-out  <= motion.digital-out-01    => [FIELD_OUTPUT](VACUUM_PUMP)
+
+
+net estop-led-out <= iocontrol.0.user-enable-out

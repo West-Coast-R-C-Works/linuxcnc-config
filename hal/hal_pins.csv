@@ -1,0 +1,8 @@
+Input 0;3D Probe
+Input 1;3D Probe Error
+
+Output 0;Suction Cleaner
+Output 1;Vacuum Pump
+Output 2;Air Blanket
+Output 3;Spindle Unlock
+Output 4;Spindle Lock

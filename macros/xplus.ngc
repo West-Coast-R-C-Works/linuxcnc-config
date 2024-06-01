@@ -1,0 +1,23 @@
+o<xplus> sub
+	
+#<x>=#<_x> (save start X position) 
+G91
+F #<_hal[probe.ps_searchvel]>
+G38.2 X[#<_hal[probe.ps_probe_max]>]
+G1 X[-#<_hal[probe.ps_probe_latch]>] F#<_ini[TOOLSENSOR]RAPID_SPEED> 
+F #<_hal[probe.ps_probevel]>
+G4 P0.5
+G38.2 X[#<_hal[probe.ps_probe_latch]>*2]
+M66 P0 L0
+o100 if [#5399]
+    (MSG, Probe Error)
+    M2
+    o<xplus> return
+o100 endif
+(print, probe X=#5061 )
+G90
+(back to start point)
+G1 X#<x> F#<_ini[TOOLSENSOR]RAPID_SPEED> 
+	
+o<xplus> endsub
+M2

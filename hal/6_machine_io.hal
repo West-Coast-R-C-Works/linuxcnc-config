@@ -1,0 +1,12 @@
+net machine-is-enabled <= motion.motion-enabled
+net machine-is-enabled => [HMOT](CARD0).7i77.0.1.analogena
+
+net machine-is-on => enable-delay.in
+net enable-del    <= enable-delay.out
+
+
+loadusr -W hal_manualtoolchange
+net tool-change-request     iocontrol.0.tool-change       =>  hal_manualtoolchange.change
+net tool-change-confirmed   iocontrol.0.tool-changed      <=  hal_manualtoolchange.changed
+net tool-number             iocontrol.0.tool-prep-number  =>  hal_manualtoolchange.number
+net tool-prepare-loopback   iocontrol.0.tool-prepare      =>  iocontrol.0.tool-prepared
