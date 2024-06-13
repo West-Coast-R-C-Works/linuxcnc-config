@@ -1,8 +1,8 @@
-T1   P1   D+6.350000 Z-220.137000 ;1/4" - flat (1/4 1 flute aluminium) 
+T1   P1   D+6.350000 Z+60.597999 ;1/4" - flat (1/4 1 flute aluminium) 
 T2   P2   D+6.350000 Z-135.805500 ;1/4 inch 2 flute wood 
 T3   P3   D+6.350000 ;1/4 inch 2 flute plastic amana 
 T4   P4   D+2.700000 Z-172.854300 ;2.7 mm drill metal 
-T5   P5   D+3.175000 Z-161.345500 ;1/8 carbon flat head amana 
+T5   P5   D+3.175000 Z+118.690999 ;1/8 carbon flat head amana 
 T6   P6   D+2.400000 ;2.4 mm carbonfiber flat head 
 T8   P8   D+3.000000 ;3mm foam cutter 75mm long 
 T9   P9   D+3.000000 Z-160.819500 ;3mm carbon datron 

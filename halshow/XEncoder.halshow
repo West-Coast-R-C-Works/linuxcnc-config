@@ -1,0 +1,1 @@
+pin+axis.x.pos-cmd pin+pid.x.command pin+hm2_7i92.0.encoder.02.count pin+hm2_7i92.0.encoder.02.position pin+pid.x.feedback pin+pid.x.output pin+hm2_7i92.0.stepgen.00.velocity-cmd pin+hm2_7i92.0.stepgen.00.velocity-fb pin+pid.x.error-previous-target pin+pid.x.error

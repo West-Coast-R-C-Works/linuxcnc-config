@@ -1,0 +1,9 @@
+pin+hm2_7i92.0.read.time
+pin+hm2_7i92.0.read.tmax
+
+pin+hm2_7i92.0.write.time
+pin+hm2_7i92.0.write.tmax
+
+pin+hm2_7i92.0.stepgen.timer-number
+pin+hm2_7i92.0.encoder.timer-number
+pin+hm2_7i92.0.dpll.01.timer-us

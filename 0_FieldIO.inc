@@ -44,7 +44,7 @@ MIST           = lcec.0.VALVE_OUT.dout-1
 AIR_BLANKET    = lcec.0.VALVE_OUT.dout-2
 SPINDLE_UNLOCK = lcec.0.VALVE_OUT.dout-3
 # SPINDLE_LOCK = Mechanically opposite to SPINDLE_UNLOCK
-SP_FAN         = hm2_7i92.0.7i77.0.0.output-13
+SP_FAN         = hm2_7i92.0.7i77.0.0.output-00
 
 # Devices
 # SUCTION_CLEANER = hm2_7i92.0.7i77.0.0.output-07

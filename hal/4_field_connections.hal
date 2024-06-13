@@ -3,9 +3,17 @@
 net estop-ok-in <= [FIELD_INPUT](ESTOP_OK) => iocontrol.0.emc-enable-in
 
 # Probe
-net tool-probe-in    <= [FIELD_INPUT](TOOL_PROBE)-not => motion.probe-input
-net probe-in    <= [FIELD_INPUT](3D_PROBE)        => motion.digital-in-00
+net probe-in    <= [FIELD_INPUT](3D_PROBE)-not        => motion.digital-in-00
 net probe-error <= [FIELD_INPUT](3D_PROBE_ERROR)  => motion.digital-in-01
+
+net probe-sel     <= motion.digital-out-05 => probe-selector.in-0
+net tool-probe-in <= [FIELD_INPUT](TOOL_PROBE)-not => probe-selector.in-1
+net probe-in      => probe-selector.in-2
+setp probe-selector.function 0xd8
+
+
+net selected-probe-state <= probe-selector.out => motion.probe-input
+
 
 ## Outputs
 net mist-out           <= iocontrol.0.coolant-mist => [FIELD_OUTPUT](MIST)

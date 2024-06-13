@@ -20,11 +20,11 @@ net spindle-cw => spindle-start.in0
 net spindle-ccw => spindle-start.in1
 net spindle-start-cmd <= spindle-start.out
 
-# net spindle-start-cmd    => spindle-vfd.spindle-on
+net spindle-start-cmd    => lcec.0.DRV.enable
 # net machine-is-enabled   => spindle-vfd.enable
-# net spindle-at-speed     <= spindle-vfd.at-speed
-# net spindle-vel-cmd-rpm  => spindle-vfd.speed-command
-#net spindle-fault       <= spindle-vfd.common-error-not
+net spindle-at-speed     <= lcec.0.DRV.stat-at-speed
+net spindle-vel-cmd-rpm  => lcec.0.DRV.vel-rpm-cmd
+net spindle-fault       <= lcec.0.DRV.stat-fault
 
 net spindle-vel-cmd-rps        <=  spindle.0.speed-out-rps
 net spindle-vel-cmd-rps-abs    <=  spindle.0.speed-out-rps-abs
@@ -38,7 +38,20 @@ net spindle-revs               =>  spindle.0.revs
 net spindle-at-speed           =>  spindle.0.at-speed
 net spindle-vel-fb-rps         =>  spindle.0.speed-in
 net spindle-index-enable      <=>  spindle.0.index-enable
-# net spindle-zero-speed         <=  spindle.0.zero-speed
+net spindle-vel-fb-rpm         <= lcec.0.DRV.vel-fb-rpm
+net spindle-vel-fb-rpm         => spindle-zero-speed-cmp.in0
+setp spindle-zero-speed-cmp.in1   0.0
+setp spindle-zero-speed-cmp.hyst  0.0
+net spindle-zero-speed         <=  spindle-zero-speed-cmp.equal
+net spindle-start-cmd          => not.4.in
+net spindle-stop-cmd           <= not.4.out
+net spindle-zero-speed         => sp-off.in0
+net spindle-stop-cmd           => sp-off.in1
+
+
+setp lcec.0.DRV.vel-ramp-down     3000
+setp lcec.0.DRV.vel-ramp-up       3000
+
 
 # net spindle-air-blanket <= motion.digital-out-02 => [FIELD_OUTPUT](AIR_BLANKET)
 net spindle-unlock                               => [FIELD_OUTPUT](SPINDLE_UNLOCK)
@@ -59,5 +72,18 @@ net spindle-unlock     <= sp-open.out
 
 net sp-toolcone-valid <= [FIELD_INPUT](TOOLCONE_VALID) => sp-safe.in-00
 net atc-not-opened    <= [FIELD_INPUT](ATC_OPENED)-not => sp-safe.in-01
-net atc-not-closed    <= [FIELD_INPUT](ATC_CLOSED)-not => sp-safe.in-03
-# net spindle-safe-state <= sp-safe.and => spindle.0.enable
+net atc-not-closed    <= [FIELD_INPUT](ATC_CLOSED)     => sp-safe.in-02
+net spindle-safe-state <= sp-safe.nand => spindle.0.inhibit
+
+
+net spindle-start-cmd => [FIELD_OUTPUT](SP_FAN)
+
+net spindle-amps      <= lcec.0.DRV.act-current => spindle-load.in0
+setp spindle-load.in1 0.084
+net spindle-load      <= spindle-load.out
+setp spindle-load.deadband 0.0001
+
+net spindle-enable  => sp-atc-error.in0
+net spindle-safe-state  => sp-atc-error.in1
+net spindle-inhibit-run <= sp-atc-error.out
+net spindle-inhibit-run => motion.err-spindle-unsafe-start

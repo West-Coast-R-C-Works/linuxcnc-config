@@ -2,9 +2,9 @@
 ######## Load ########
 ######################
 
-loadusr -W lcec_conf /home/mill/linuxcnc/configs/FixedGantry_Gmocappy_7i77/ethercat.xml
+loadusr -W lcec_conf ethercat.xml
 loadrt [KINS]KINEMATICS
-loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_dio=8
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS num_dio=30 num_aio=30 num_spindles=1 names_misc_errors=spindle-unsafe-start
 loadrt hostmot2
 loadrt lcec
 loadrt hm2_eth board_ip=10.10.10.10
@@ -13,7 +13,7 @@ loadrt hm2_eth board_ip=10.10.10.10
 loadrt pid names=pid.x,pid.y,pid.z,pid.s
 loadrt abs names=abs.spindle
 loadrt lowpass names=lowpass.spindle
-loadrt and2 names=x-servo-alarm,y-servo-alarm,z-servo-alarm,stop,start,pause,opt-pause-on,opt-pause-off,resume,homeing,homed-1,homed-2,ready-start,red,enable,disable,z-brake,sp-open
+loadrt and2 names=x-servo-alarm,y-servo-alarm,z-servo-alarm,stop,start,pause,opt-pause-on,opt-pause-off,resume,homeing,homed-1,homed-2,ready-start,red,enable,disable,z-brake,sp-open,sp-off,sp-atc-error
 loadrt timedelay names=enable-delay,brake-delay,cone-clean-delay
 loadrt mult2 names=feed-override-percentage,spindle-override-percentage
 loadrt conv_float_s32 names=spindle-override-percentage-clip,feed-override-percentage-clip,spindle-override-pos-conv,feed-override-pos-conv
@@ -21,10 +21,12 @@ loadrt edge names=opt-pause-ed,enable-ed
 loadrt or2  names=green,spindle-start
 loadrt flipflop names=opt-p-on,opt-p-off,homing-act,enable-act,disable-act
 loadrt debounce cfg=5
-loadrt not count=4
+loadrt not count=5
 loadrt mux16 names=jog-incr-select
-loadrt logic names=sp-safe personality=0x104
-# loadusr -Wn spindle-vfd vfdm_vfd -I FixedGantry_Gmoccapy_7i77.ini -n spindle-vfd
+loadrt logic names=sp-safe personality=0x803
+loadrt comp names=spindle-zero-speed-cmp
+loadrt div2 names=spindle-load
+loadrt lut5 names=probe-selector
 
 ######################
 ### Configuration ####
@@ -46,6 +48,7 @@ setp hm2_7i92.0.stepgen.timer-number 2
 addf lcec.read-all               servo-thread
 addf [HMOT](CARD0).read-request  servo-thread
 addf [HMOT](CARD0).read          servo-thread
+addf probe-selector              servo-thread
 addf spindle-override-pos-conv   servo-thread
 addf feed-override-pos-conv      servo-thread
 addf x-servo-alarm               servo-thread
@@ -82,19 +85,26 @@ addf not.0                       servo-thread
 addf not.1                       servo-thread
 addf not.2                       servo-thread
 addf not.3                       servo-thread
+addf not.4                       servo-thread
 addf opt-p-on                    servo-thread
 addf opt-p-off                   servo-thread
 addf homing-act                  servo-thread
 addf enable-act                  servo-thread
 addf disable-act                 servo-thread
+addf spindle-zero-speed-cmp      servo-thread
 addf spindle-start               servo-thread
 addf sp-open                     servo-thread
 addf sp-safe                     servo-thread
+addf sp-off                      servo-thread
+addf sp-atc-error                servo-thread
 addf cone-clean-delay            servo-thread
 addf z-brake                     servo-thread
 
 
 addf [HMOT](CARD0).write         servo-thread
 addf lcec.write-all servo-thread
+
+# Non-critical (mostly for display)
+addf spindle-load                servo-thread
 
 
