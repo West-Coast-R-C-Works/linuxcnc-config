@@ -10,7 +10,7 @@ setp   pid.s.maxoutput [SPINDLE_0]MAX_OUTPUT
 setp   pid.s.error-previous-target true
 
 net spindle-index-enable  <=> pid.s.index-enable
-net spindle-enable        =>  pid.s.enable
+net spindle-start-cmd        =>  pid.s.enable
 net spindle-vel-cmd-rpm   => pid.s.command
 net spindle-vel-fb-rpm    => pid.s.feedback
 net spindle-output        <=  pid.s.output
@@ -18,7 +18,6 @@ net spindle-output        <=  pid.s.output
 ### Spindle Start command ###
 net spindle-cw => spindle-start.in0
 net spindle-ccw => spindle-start.in1
-net spindle-start-cmd <= spindle-start.out
 
 net spindle-start-cmd    => lcec.0.DRV.enable
 # net machine-is-enabled   => spindle-vfd.enable
@@ -53,16 +52,16 @@ setp lcec.0.DRV.vel-ramp-down     3000
 setp lcec.0.DRV.vel-ramp-up       3000
 
 
-# net spindle-air-blanket <= motion.digital-out-02 => [FIELD_OUTPUT](AIR_BLANKET)
+# net spindle-air-blanket <= motion.digital-out-02 => [FIELD_OUTPUT](CONE_CLEAN)
 net spindle-unlock                               => [FIELD_OUTPUT](SPINDLE_UNLOCK)
-# net spindle-unlock                               => [FIELD_OUTPUT](AIR_BLANKET)
+# net spindle-unlock                               => [FIELD_OUTPUT](CONE_CLEAN)
 # net spindle-lock <= motion.digital-out-04 => [FIELD_OUTPUT](SPINDLE_LOCK)
 
 
 setp cone-clean-delay.on-delay 1
 setp cone-clean-delay.off-delay 0
 net spindle-unlock => cone-clean-delay.in
-net cone-clean-out <= cone-clean-delay.out => [FIELD_OUTPUT](AIR_BLANKET)
+net cone-clean-out <= cone-clean-delay.out => [FIELD_OUTPUT](CONE_CLEAN)
 
 net user-spindle-open  => sp-open.in0
 net spindle-zero-speed => sp-open.in1
@@ -76,7 +75,6 @@ net atc-not-closed    <= [FIELD_INPUT](ATC_CLOSED)     => sp-safe.in-02
 net spindle-safe-state <= sp-safe.nand => spindle.0.inhibit
 
 
-net spindle-start-cmd => [FIELD_OUTPUT](SP_FAN)
 
 net spindle-amps      <= lcec.0.DRV.act-current => spindle-load.in0
 setp spindle-load.in1 0.084
@@ -87,3 +85,15 @@ net spindle-enable  => sp-atc-error.in0
 net spindle-safe-state  => sp-atc-error.in1
 net spindle-inhibit-run <= sp-atc-error.out
 net spindle-inhibit-run => motion.err-spindle-unsafe-start
+
+setp air-blanket-delay.on-delay  0
+setp air-blanket-delay.off-delay [SPINDLE_0](COOL_DELAY)
+net spindle-enable => air-blanket-delay.in
+net air-blanket-on <= air-blanket-delay.out
+net air-blanket-on => [FIELD_OUTPUT](SP_FAN)
+net air-blanket-on => [FIELD_OUTPUT](AIR_BLANKET)
+
+setp spindle-enable-delay.on-delay  [SPINDLE_0](ON_DELAY)
+setp spindle-enable-delay.off-delay 0
+net spindle-enable => spindle-enable-delay.in
+net spindle-start-cmd <= spindle-enable-delay.out

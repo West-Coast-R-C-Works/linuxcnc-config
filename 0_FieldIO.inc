@@ -40,8 +40,9 @@ ATC_CLOSED = lcec.0.FIELD_INPUT.din-5
 
 [FIELD_OUTPUT]
 # Solonoids
+AIR_BLANKET    = lcec.0.VALVE_OUT.dout-0
 MIST           = lcec.0.VALVE_OUT.dout-1
-AIR_BLANKET    = lcec.0.VALVE_OUT.dout-2
+CONE_CLEAN     = lcec.0.VALVE_OUT.dout-2
 SPINDLE_UNLOCK = lcec.0.VALVE_OUT.dout-3
 # SPINDLE_LOCK = Mechanically opposite to SPINDLE_UNLOCK
 SP_FAN         = hm2_7i92.0.7i77.0.0.output-00
