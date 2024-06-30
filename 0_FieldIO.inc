@@ -37,6 +37,10 @@ TOOLCONE_VALID = lcec.0.FIELD_INPUT.din-3
 ATC_OPENED = lcec.0.FIELD_INPUT.din-4
 ATC_CLOSED = lcec.0.FIELD_INPUT.din-5
 
+# Air Pressure
+AIR_BLANKET_PRES_OK = lcec.0.VALVE_IN.din-0
+AIR_PRES_OK = lcec.0.VALVE_IN.din-1
+
 
 [FIELD_OUTPUT]
 # Solonoids

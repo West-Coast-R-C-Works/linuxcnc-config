@@ -23,7 +23,7 @@ loadrt flipflop names=opt-p-on,opt-p-off,homing-act,enable-act,disable-act
 loadrt debounce cfg=5
 loadrt not count=5
 loadrt mux16 names=jog-incr-select
-loadrt logic names=sp-safe personality=0x803
+loadrt logic names=sp-safe personality=0x804
 loadrt comp names=spindle-zero-speed-cmp
 loadrt div2 names=spindle-load
 loadrt lut5 names=probe-selector

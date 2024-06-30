@@ -69,10 +69,11 @@ net spindle-unlock     <= sp-open.out
 
 
 
-net sp-toolcone-valid <= [FIELD_INPUT](TOOLCONE_VALID) => sp-safe.in-00
-net atc-not-opened    <= [FIELD_INPUT](ATC_OPENED)-not => sp-safe.in-01
-net atc-not-closed    <= [FIELD_INPUT](ATC_CLOSED)     => sp-safe.in-02
-net spindle-safe-state <= sp-safe.nand => spindle.0.inhibit
+net sp-toolcone-valid       <= [FIELD_INPUT](TOOLCONE_VALID)      => sp-safe.in-00
+net atc-not-opened          <= [FIELD_INPUT](ATC_OPENED)-not      => sp-safe.in-01
+net atc-not-closed          <= [FIELD_INPUT](ATC_CLOSED)          => sp-safe.in-02
+net air-blanket-pressure-ok <= [FIELD_INPUT](AIR_BLANKET_PRES_OK) => sp-safe.in-03
+net spindle-not-safe-state <= sp-safe.nand => spindle.0.inhibit
 
 
 
@@ -82,7 +83,7 @@ net spindle-load      <= spindle-load.out
 setp spindle-load.deadband 0.0001
 
 net spindle-enable  => sp-atc-error.in0
-net spindle-safe-state  => sp-atc-error.in1
+net spindle-not-safe-state  => sp-atc-error.in1
 net spindle-inhibit-run <= sp-atc-error.out
 net spindle-inhibit-run => motion.err-spindle-unsafe-start
 
