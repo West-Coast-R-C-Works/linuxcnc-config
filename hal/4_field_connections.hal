@@ -22,3 +22,5 @@ net mist-out           <= iocontrol.0.coolant-mist => [FIELD_OUTPUT](MIST)
 
 
 net estop-led-out <= iocontrol.0.user-enable-out
+
+net air-pressure-ok <= [FIELD_INPUT](AIR_PRES_OK)

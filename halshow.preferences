@@ -1,24 +1,13 @@
 # Halshow settings
 # This file is generated automatically.
-wm geometry . 925x690+212+151
+wm geometry . 925x672+202+161
 placeFrames 0.39759036144578314
 set ::ratio 0.39759036144578314
 set ::old_w_leftf 160
 set ::watchlist {
-    sig+tool-probe-in
-    pin+lcec.0.DRV.act-current
-    sig+spindle-safe-state
-    sig+spindle-enable
-    sig+spindle-start-cmd
-    pin+sp-atc-error.in0
-    sig+spindle-inhibit-run
-    sig+selected-probe-state
-    sig+probe-in
-    pin+probe-selector.in-0
-    pin+probe-selector.in-1
-    pin+probe-selector.in-2
-    pin+probe-selector.out
-    sig+probe-error
+    pin+lcec.0.VALVE_IN.din-1
+    pin+lcec.0.VALVE_IN.din-0
+    sig+spindle-not-safe-state
 }
 set ::workmode watchhal
 set ::watchInterval 100

@@ -72,7 +72,7 @@ net spindle-unlock     <= sp-open.out
 net sp-toolcone-valid       <= [FIELD_INPUT](TOOLCONE_VALID)      => sp-safe.in-00
 net atc-not-opened          <= [FIELD_INPUT](ATC_OPENED)-not      => sp-safe.in-01
 net atc-not-closed          <= [FIELD_INPUT](ATC_CLOSED)          => sp-safe.in-02
-net air-blanket-pressure-ok <= [FIELD_INPUT](AIR_BLANKET_PRES_OK) => sp-safe.in-03
+net air-blanket-pressure-ok                                       => sp-safe.in-03
 net spindle-not-safe-state <= sp-safe.nand => spindle.0.inhibit
 
 
@@ -98,3 +98,14 @@ setp spindle-enable-delay.on-delay  [SPINDLE_0](ON_DELAY)
 setp spindle-enable-delay.off-delay 0
 net spindle-enable => spindle-enable-delay.in
 net spindle-start-cmd <= spindle-enable-delay.out
+
+setp spindle-short-enable-delay.on-delay  [SPINDLE_0](SHORT_ON_DELAY)
+setp spindle-short-enable-delay.off-delay 0
+net spindle-enable => spindle-short-enable-delay.in
+net spindle-enable-short-delayed <= spindle-short-enable-delay.out
+
+net spindle-enable-short-delayed => sp-pressure-selector.in-0
+net air-blanket-pressure-ok-raw <= [FIELD_INPUT](AIR_BLANKET_PRES_OK) => sp-pressure-selector.in-1
+net air-pressure-ok  => sp-pressure-selector.in-2
+net air-blanket-pressure-ok <= sp-pressure-selector.out
+setp sp-pressure-selector.function 0xd8

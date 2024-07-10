@@ -14,7 +14,7 @@ loadrt pid names=pid.x,pid.y,pid.z,pid.s
 loadrt abs names=abs.spindle
 loadrt lowpass names=lowpass.spindle
 loadrt and2 names=x-servo-alarm,y-servo-alarm,z-servo-alarm,stop,start,pause,opt-pause-on,opt-pause-off,resume,homeing,homed-1,homed-2,ready-start,red,enable,disable,z-brake,sp-open,sp-off,sp-atc-error
-loadrt timedelay names=enable-delay,brake-delay,cone-clean-delay,air-blanket-delay,spindle-enable-delay
+loadrt timedelay names=enable-delay,brake-delay,cone-clean-delay,air-blanket-delay,spindle-enable-delay,spindle-short-enable-delay
 loadrt mult2 names=feed-override-percentage,spindle-override-percentage
 loadrt conv_float_s32 names=spindle-override-percentage-clip,feed-override-percentage-clip,spindle-override-pos-conv,feed-override-pos-conv
 loadrt edge names=opt-pause-ed,enable-ed
@@ -26,7 +26,7 @@ loadrt mux16 names=jog-incr-select
 loadrt logic names=sp-safe personality=0x804
 loadrt comp names=spindle-zero-speed-cmp
 loadrt div2 names=spindle-load
-loadrt lut5 names=probe-selector
+loadrt lut5 names=probe-selector,sp-pressure-selector
 
 ######################
 ### Configuration ####
@@ -56,7 +56,9 @@ addf y-servo-alarm               servo-thread
 addf z-servo-alarm               servo-thread
 addf enable-delay                servo-thread
 addf spindle-enable-delay        servo-thread
+addf spindle-short-enable-delay  servo-thread
 addf air-blanket-delay           servo-thread
+addf sp-pressure-selector        servo-thread
 addf motion-command-handler      servo-thread
 addf motion-controller           servo-thread
 addf pid.x.do-pid-calcs          servo-thread
