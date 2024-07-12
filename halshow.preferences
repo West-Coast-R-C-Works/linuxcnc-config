@@ -1,6 +1,6 @@
 # Halshow settings
 # This file is generated automatically.
-wm geometry . 925x672+202+161
+wm geometry . 925x672+824+117
 placeFrames 0.39759036144578314
 set ::ratio 0.39759036144578314
 set ::old_w_leftf 160
@@ -8,6 +8,16 @@ set ::watchlist {
     pin+lcec.0.VALVE_IN.din-1
     pin+lcec.0.VALVE_IN.din-0
     sig+spindle-not-safe-state
+    pin+classicladder.0.in-00
+    pin+classicladder.0.in-01
+    pin+classicladder.0.in-02
+    pin+classicladder.0.in-03
+    pin+classicladder.0.s32in-00
+    pin+classicladder.0.out-00
+    pin+classicladder.0.out-01
+    pin+classicladder.0.out-02
+    pin+spindle.0.inhibit
+    pin+lcec.0.DRV.stat-op-enabled
 }
 set ::workmode watchhal
 set ::watchInterval 100

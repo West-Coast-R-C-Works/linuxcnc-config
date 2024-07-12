@@ -27,6 +27,7 @@ loadrt logic names=sp-safe personality=0x804
 loadrt comp names=spindle-zero-speed-cmp
 loadrt div2 names=spindle-load
 loadrt lut5 names=probe-selector,sp-pressure-selector
+loadrt classicladder_rt
 
 ######################
 ### Configuration ####
@@ -48,6 +49,7 @@ setp hm2_7i92.0.stepgen.timer-number 2
 addf lcec.read-all               servo-thread
 addf [HMOT](CARD0).read-request  servo-thread
 addf [HMOT](CARD0).read          servo-thread
+addf classicladder.0.refresh     servo-thread
 addf probe-selector              servo-thread
 addf spindle-override-pos-conv   servo-thread
 addf feed-override-pos-conv      servo-thread

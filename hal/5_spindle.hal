@@ -37,6 +37,7 @@ net spindle-revs               =>  spindle.0.revs
 net spindle-at-speed           =>  spindle.0.at-speed
 net spindle-vel-fb-rps         =>  spindle.0.speed-in
 net spindle-index-enable      <=>  spindle.0.index-enable
+net spindle-inhibit            =>  spindle.0.inhibit
 net spindle-vel-fb-rpm         <= lcec.0.DRV.vel-fb-rpm
 net spindle-vel-fb-rpm         => spindle-zero-speed-cmp.in0
 setp spindle-zero-speed-cmp.in1   0.0
@@ -68,14 +69,11 @@ net spindle-zero-speed => sp-open.in1
 net spindle-unlock     <= sp-open.out
 
 
+net sp-toolcone-valid   <= [FIELD_INPUT](TOOLCONE_VALID)
+net atc-opened          <= [FIELD_INPUT](ATC_OPENED)
+net atc-closed          <= [FIELD_INPUT](ATC_CLOSED)
 
-net sp-toolcone-valid       <= [FIELD_INPUT](TOOLCONE_VALID)      => sp-safe.in-00
-net atc-not-opened          <= [FIELD_INPUT](ATC_OPENED)-not      => sp-safe.in-01
-net atc-not-closed          <= [FIELD_INPUT](ATC_CLOSED)          => sp-safe.in-02
-net air-blanket-pressure-ok                                       => sp-safe.in-03
-net spindle-not-safe-state <= sp-safe.nand => spindle.0.inhibit
-
-
+net air-blanket-pressure-ok <= [FIELD_INPUT](AIR_BLANKET_PRES_OK)
 
 net spindle-amps      <= lcec.0.DRV.act-current => spindle-load.in0
 setp spindle-load.in1 0.084
@@ -87,25 +85,19 @@ net spindle-not-safe-state  => sp-atc-error.in1
 net spindle-inhibit-run <= sp-atc-error.out
 net spindle-inhibit-run => motion.err-spindle-unsafe-start
 
-setp air-blanket-delay.on-delay  0
-setp air-blanket-delay.off-delay [SPINDLE_0](COOL_DELAY)
-net spindle-enable => air-blanket-delay.in
-net air-blanket-on <= air-blanket-delay.out
-net air-blanket-on => [FIELD_OUTPUT](SP_FAN)
-net air-blanket-on => [FIELD_OUTPUT](AIR_BLANKET)
+net spindle-blanket-on => [FIELD_OUTPUT](SP_FAN)
+net spindle-blanket-on => [FIELD_OUTPUT](AIR_BLANKET)
 
-setp spindle-enable-delay.on-delay  [SPINDLE_0](ON_DELAY)
-setp spindle-enable-delay.off-delay 0
-net spindle-enable => spindle-enable-delay.in
-net spindle-start-cmd <= spindle-enable-delay.out
 
-setp spindle-short-enable-delay.on-delay  [SPINDLE_0](SHORT_ON_DELAY)
-setp spindle-short-enable-delay.off-delay 0
-net spindle-enable => spindle-short-enable-delay.in
-net spindle-enable-short-delayed <= spindle-short-enable-delay.out
+loadusr classicladder servo.clp
+net air-pressure-ok         => classicladder.0.in-00
+net air-blanket-pressure-ok => classicladder.0.in-01
+net spindle-enable          => classicladder.0.in-02
+net sp-toolcone-valid       => classicladder.0.in-03
+net atc-opened              => classicladder.0.in-04
+net atc-closed              => classicladder.0.in-05
 
-net spindle-enable-short-delayed => sp-pressure-selector.in-0
-net air-blanket-pressure-ok-raw <= [FIELD_INPUT](AIR_BLANKET_PRES_OK) => sp-pressure-selector.in-1
-net air-pressure-ok  => sp-pressure-selector.in-2
-net air-blanket-pressure-ok <= sp-pressure-selector.out
-setp sp-pressure-selector.function 0xd8
+net spindle-start-cmd      <= classicladder.0.out-00
+net spinlde-pressure-alarm <= classicladder.0.out-01
+net spindle-blanket-on     <= classicladder.0.out-02
+net spindle-inhibit        <= classicladder.0.out-03
