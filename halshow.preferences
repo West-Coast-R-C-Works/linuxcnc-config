@@ -5,19 +5,28 @@ placeFrames 0.39759036144578314
 set ::ratio 0.39759036144578314
 set ::old_w_leftf 160
 set ::watchlist {
-    pin+lcec.0.VALVE_IN.din-1
-    pin+lcec.0.VALVE_IN.din-0
-    sig+spindle-not-safe-state
-    pin+classicladder.0.in-00
-    pin+classicladder.0.in-01
-    pin+classicladder.0.in-02
-    pin+classicladder.0.in-03
-    pin+classicladder.0.s32in-00
-    pin+classicladder.0.out-00
-    pin+classicladder.0.out-01
-    pin+classicladder.0.out-02
-    pin+spindle.0.inhibit
-    pin+lcec.0.DRV.stat-op-enabled
+    pin+vacuum_vfd.at-speed
+    pin+vacuum_vfd.common-error-not
+    pin+vacuum_vfd.enable
+    pin+vacuum_vfd.error-code
+    pin+vacuum_vfd.error-count
+    pin+vacuum_vfd.frequency-command
+    pin+vacuum_vfd.frequency-limit
+    pin+vacuum_vfd.frequency-out
+    pin+vacuum_vfd.inverter-load-percentage
+    pin+vacuum_vfd.is-e-stopped
+    pin+vacuum_vfd.is-stopped
+    pin+vacuum_vfd.jog-mode
+    pin+vacuum_vfd.max-rpm
+    pin+vacuum_vfd.max-speed
+    pin+vacuum_vfd.modbus-ok
+    pin+vacuum_vfd.motor-RPM
+    pin+vacuum_vfd.motor-RPS
+    pin+vacuum_vfd.output-current
+    pin+vacuum_vfd.output-voltage
+    pin+vacuum_vfd.speed-command
+    pin+vacuum_vfd.spindle-on
+    pin+vacuum_vfd.status
 }
 set ::workmode watchhal
 set ::watchInterval 100

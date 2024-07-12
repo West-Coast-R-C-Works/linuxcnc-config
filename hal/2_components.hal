@@ -28,6 +28,7 @@ loadrt comp names=spindle-zero-speed-cmp
 loadrt div2 names=spindle-load
 loadrt lut5 names=probe-selector,sp-pressure-selector
 loadrt classicladder_rt
+loadusr -Wn vacuum_vfd vfdm_vfd -I FixedGantry_QTPYVCP.ini -n vacuum_vfd
 
 ######################
 ### Configuration ####
