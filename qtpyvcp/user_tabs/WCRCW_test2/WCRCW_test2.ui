@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>USER</class>
+ <widget class="QWidget" name="USER">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>179</width>
+    <height>511</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>179</width>
+    <height>511</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Sidebar User Tab</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="sidebar" stdset="0">
+   <bool>true</bool>
+  </property>
+  <widget class="StatusLabel" name="statuslabel">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>190</y>
+     <width>52</width>
+     <height>17</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StatusLabel</class>
+   <extends>QLabel</extends>
+   <header>qtpyvcp.widgets.display_widgets.status_label</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

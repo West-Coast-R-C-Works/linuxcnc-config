@@ -1,32 +1,36 @@
 # Halshow settings
 # This file is generated automatically.
-wm geometry . 925x672+824+117
+wm geometry . 925x672+985+231
 placeFrames 0.39759036144578314
 set ::ratio 0.39759036144578314
 set ::old_w_leftf 160
 set ::watchlist {
+    pin+qtpyvcp.VacuumPumpRunning.flash
+    pin+qtpyvcp.VacuumPumpRunning.flash-rate
+    pin+qtpyvcp.VacuumPumpRunning.on
+    pin+vacuum-pump-run.in0
+    pin+vacuum-pump-run.in1
+    pin+vacuum-pump-run.out
+    pin+vacuum-pump-run.time
     pin+vacuum_vfd.at-speed
-    pin+vacuum_vfd.common-error-not
-    pin+vacuum_vfd.enable
-    pin+vacuum_vfd.error-code
-    pin+vacuum_vfd.error-count
-    pin+vacuum_vfd.frequency-command
-    pin+vacuum_vfd.frequency-limit
-    pin+vacuum_vfd.frequency-out
-    pin+vacuum_vfd.inverter-load-percentage
-    pin+vacuum_vfd.is-e-stopped
-    pin+vacuum_vfd.is-stopped
-    pin+vacuum_vfd.jog-mode
-    pin+vacuum_vfd.max-rpm
-    pin+vacuum_vfd.max-speed
-    pin+vacuum_vfd.modbus-ok
     pin+vacuum_vfd.motor-RPM
     pin+vacuum_vfd.motor-RPS
-    pin+vacuum_vfd.output-current
-    pin+vacuum_vfd.output-voltage
-    pin+vacuum_vfd.speed-command
-    pin+vacuum_vfd.spindle-on
+    pin+vacuum_vfd.max-rpm
+    pin+vacuum_vfd.modbus-ok
+    pin+vacuum_vfd.frequency-out
+    pin+vacuum_vfd.frequency-limit
+    pin+vacuum_vfd.frequency-command
     pin+vacuum_vfd.status
+    sig+x-servo-alarm-input
+    pin+qtpyvcp.X_Axis_Error.on
+    pin+qtpyvcp.ISO20Status.on
+    pin+qtpyvcp.ATCOpenStatus.on
+    pin+qtpyvcp.ATCClosedStatus.on
+    pin+qtpyvcp.MainPressureOK.on
+    pin+qtpyvcp.BlanketPressureOK.on
+    pin+qtpyvcp.3DProbeStatus.on
+    pin+qtpyvcp.ToolProbeStatus.on
+    pin+motion.digital-out-05
 }
 set ::workmode watchhal
 set ::watchInterval 100

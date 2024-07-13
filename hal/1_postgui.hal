@@ -21,3 +21,32 @@ net probe-in  =>  qtpyvcp.probe-led.on
 net spindle-vel-fb-rpm =>  qtpyvcp.spindle-encoder-rpm.in
 net spindle-load       => qtpyvcp.spindle-load-indicator.in-f
 setp qtpyvcp.spindle-load-indicator.max-val 180
+
+net x-servo-alarm-input => qtpyvcp.X_Axis_Error.on
+net y-servo-alarm-input => qtpyvcp.Y_Axis_Error.on
+net z-servo-alarm-input => qtpyvcp.Z_Axis_Error.on
+
+net axis-amp-reset <= qtpyvcp.AxisAlarmACK.out
+net axis-amp-reset => [FIELD_OUTPUT](X_RESET)
+net axis-amp-reset => [FIELD_OUTPUT](Y_RESET)
+net axis-amp-reset => [FIELD_OUTPUT](Z_RESET)
+
+net vacuum_pump_at_speed <= vacuum_vfd.at-speed => vacuum-pump-run.in0
+net vacuum_pump_on => vacuum-pump-run.in1
+net vacuum_pump_running <= vacuum-pump-run.out => qtpyvcp.VacuumPumpRunning.on
+net vacuum_pump_button_in <= qtpyvcp.VacuumPumpCMD.out => vacuum-pump-control.in
+net vacuum_pump_on <= vacuum-pump-control.out => vacuum_vfd.spindle-on
+setp vacuum_vfd.enable TRUE
+setp vacuum_vfd.speed-command 1750
+
+net sp-toolcone-valid        => qtpyvcp.ISO20Status.on
+net atc-opened               => qtpyvcp.ATCOpenStatus.on
+net atc-closed               => qtpyvcp.ATCClosedStatus.on
+
+net air-pressure-ok          => qtpyvcp.MainPressureOK.on
+net air-blanket-pressure-ok  => qtpyvcp.BlanketPressureOK.on
+
+
+net probe-sel => not.5.in
+net 3d-probe-sel <= not.5.out => qtpyvcp.3DProbeStatus.on
+net probe-sel => qtpyvcp.ToolProbeStatus.on

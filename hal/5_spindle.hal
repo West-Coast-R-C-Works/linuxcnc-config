@@ -53,11 +53,7 @@ setp lcec.0.DRV.vel-ramp-down     3000
 setp lcec.0.DRV.vel-ramp-up       3000
 
 
-# net spindle-air-blanket <= motion.digital-out-02 => [FIELD_OUTPUT](CONE_CLEAN)
 net spindle-unlock                               => [FIELD_OUTPUT](SPINDLE_UNLOCK)
-# net spindle-unlock                               => [FIELD_OUTPUT](CONE_CLEAN)
-# net spindle-lock <= motion.digital-out-04 => [FIELD_OUTPUT](SPINDLE_LOCK)
-
 
 setp cone-clean-delay.on-delay 1
 setp cone-clean-delay.off-delay 0
@@ -89,7 +85,7 @@ net spindle-blanket-on => [FIELD_OUTPUT](SP_FAN)
 net spindle-blanket-on => [FIELD_OUTPUT](AIR_BLANKET)
 
 
-loadusr classicladder servo.clp
+loadusr classicladder servo.clp --nogui
 net air-pressure-ok         => classicladder.0.in-00
 net air-blanket-pressure-ok => classicladder.0.in-01
 net spindle-enable          => classicladder.0.in-02

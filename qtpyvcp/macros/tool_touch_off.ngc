@@ -38,7 +38,7 @@ G53 G0 Z0    (move to z0 home position)
 G53 G0 X#<tool_touch_x_coords> Y#<tool_touch_y_coords>
 G53 G0 Z#<tool_touch_z_coords>
 
-M62 P5
+M64 P5
 
 G91
 F #<fast_probe_fr>
@@ -99,7 +99,7 @@ o160 else if [#<workspace_z> EQ 8]
 o160 endif
 
 T #5400 G43  H #5400    (enable tool length offset)
-M63 P5
+M65 P5
 
 o<tool_touch_off> endsub
 
