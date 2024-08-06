@@ -15,7 +15,8 @@ net tool-number             =>  qtpyvcp_manualtoolchange.number
 
 # *** Probe graphic simulation trigger push probe tip ***
 # net probe-in  =>  qtpyvcp.probe-in.out
-net probe-in  =>  qtpyvcp.probe-led.on
+# net probe-in  =>  qtpyvcp.probe-led.on
+net tool-probe-in  =>  qtpyvcp.probe-led.on
 
 # *** Set line below for actual spindle readout from your hal file ***
 net spindle-vel-fb-rpm =>  qtpyvcp.spindle-encoder-rpm.in
@@ -47,6 +48,8 @@ net air-pressure-ok          => qtpyvcp.MainPressureOK.on
 net air-blanket-pressure-ok  => qtpyvcp.BlanketPressureOK.on
 
 
-net probe-sel => not.5.in
-net 3d-probe-sel <= not.5.out => qtpyvcp.3DProbeStatus.on
-net probe-sel => qtpyvcp.ToolProbeStatus.on
+# net probe-sel => not.5.in
+# net 3d-probe-sel <= not.5.out => qtpyvcp.3DProbeStatus.on
+# net probe-sel => qtpyvcp.ToolProbeStatus.on
+setp qtpyvcp.3DProbeStatus.on 0
+setp qtpyvcp.ToolProbeStatus.on 1
